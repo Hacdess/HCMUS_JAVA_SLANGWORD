@@ -2,6 +2,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        SlangWordDictionary app = new SlangWordDictionary();
+        app.loadDataFromFile();
         Scanner sc = new Scanner(System.in);
 
         while(true) {
@@ -20,6 +22,7 @@ public class Main {
 
             System.out.print("Please enter a number (0 - 10): ");
             int choice = sc.nextInt();
+            sc.nextLine();
 
             switch (choice) {
                 case 0:
@@ -29,6 +32,7 @@ public class Main {
                 case 1:
                     System.out.println("Function 1 selected!");
                     System.out.println("Enter a slang word: ");
+                    app.findBySlang(sc.nextLine());
                     break;
 
                 case 2:

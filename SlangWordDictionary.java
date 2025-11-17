@@ -36,28 +36,26 @@ public class SlangWordDictionary {
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
 
-                String[] parts = line.split("`");
+                String[] parts = line.split("`", 2);
                 if (parts.length < 2) continue;
 
                 String slang = parts[0].trim();
                 if (slang.isEmpty()) continue;
 
-                String[] meanings = parts[1].split("\\|");
-                List<String> meaningList = new ArrayList<>();
-
-                for (String meaning : meanings) {
-                    String trimmed = meaning.trim();
-                    if (!trimmed.isEmpty())
-                        meaningList.add(meaning.trim());
-                }
+                List<String> meanings = Arrays.stream(parts[1].split("\\|"))
+                                                .map(String::trim)
+                                                .filter(m -> !m.isEmpty())
+                                                .collect(Collectors.toList());
                 
-                if (meaningList.isEmpty()) continue;
+                if (meanings.isEmpty()) continue;
 
-                dictionary.computeIfAbsent(slang, k -> new ArrayList<>())
-                            .addAll(meaningList
-                            .stream()
-                            .filter(meaning -> dictionary.get(slang) == null || !dictionary.get(slang).contains(meaning))
-                            .collect(Collectors.toList()));
+                List<String> current = dictionary.getOrDefault(slang, new ArrayList<>());
+                for (String m : meanings) {
+                    if (!current.contains(m)) {
+                        current.add(m);
+                    }
+                }
+                dictionary.put(slang, current);
             }
 
             buildKeywordIndex();
@@ -65,21 +63,6 @@ public class SlangWordDictionary {
             
         } catch (IOException e) {
             System.err.println("File reading's error: " + e.getMessage());
-        }
-    }
-
-    public void exportFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(DataFile))) {
-            List<String> slangs = new ArrayList<>(dictionary.keySet());
-            
-            for (String slang : slangs) {
-                bw.write(slang + "`" + String.join("| ", dictionary.get(slang)));
-                bw.newLine();
-            }
-            
-            System.out.println("Exported data to " + DataFile + " successfully!");
-        } catch (IOException e) {
-            System.err.println("File writing's error: " + e.getMessage());
         }
     }
 
@@ -101,15 +84,47 @@ public class SlangWordDictionary {
         }
     }
 
-    public static void main(String[] args) {
-        SlangWordDictionary app = new SlangWordDictionary();
-        app.loadDataFromFile();
+    public void exportFile() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(DataFile))) {
+            List<String> slangs = new ArrayList<>(dictionary.keySet());
+            
+            for (String slang : slangs) {
+                bw.write(slang + "`" + String.join("| ", dictionary.get(slang)));
+                bw.newLine();
+            }
+            
+            System.out.println("Exported data to " + DataFile + " successfully!");
+        } catch (IOException e) {
+            System.err.println("File writing's error: " + e.getMessage());
+        }
+    }
+
+    // ===== FUNCTIONS =====
+    public void findBySlang(String slang) {
+        if (slang == null || slang.trim().isEmpty()) {
+            System.out.println("Empty slang!");
+            return;
+        }
+
+        slang = slang.trim();
+        List<String> meanings = dictionary.get(slang);
+        if (meanings == null) {
+            System.out.println("Can't find slang: " + slang);
+            return;
+        }
+        System.out.println(slang + " : " + String.join(" | ", meanings));
+        searchHistory.add("Find slang: " + slang);
+    }
+
+    // public static void main(String[] args) {
+    //     SlangWordDictionary app = new SlangWordDictionary();
+    //     app.loadDataFromFile();
         
 
 
 
-        app.exportFile();
+    //     app.exportFile();
 
             
-    }
+    // }
 }
