@@ -99,20 +99,21 @@ public class SlangWordDictionary {
     }
 
     // ===== FUNCTIONS =====
-    public void findBySlang(String slang) {
+    public List<String> findBySlang(String slang) {
         if (slang == null || slang.trim().isEmpty()) {
             System.out.println("Empty slang!");
-            return;
+            return null;
         }
 
         slang = slang.trim();
         List<String> meanings = dictionary.get(slang);
         if (meanings == null) {
             System.out.println("Can't find slang: " + slang);
-            return;
+            return null;
         }
         System.out.println(slang + " : " + String.join(" | ", meanings));
         searchHistory.add("Find by slang: " + slang);
+        return meanings;
     }
 
     public void findByDefinition(String keyword) {
@@ -187,6 +188,21 @@ public class SlangWordDictionary {
         System.out.println("Added slang " + slang);
         exportFile();
     }
+
+    void editSlangWord(String slang, Scanner sc) {
+        List<String> meanings = findBySlang(slang);
+        if (meanings == null)
+            return;
+        System.out.println("Enter new meanings: ");
+        meanings.clear();
+        String[] arr = sc.nextLine().split(",");
+        for (String a : arr) {
+            meanings.add(a.trim());
+        }
+        dictionary.put(slang, meanings);
+        exportFile();
+    }
+
     // public static void main(String[] args) {
     //     SlangWordDictionary app = new SlangWordDictionary();
     //     app.loadDataFromFile();

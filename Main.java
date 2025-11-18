@@ -64,6 +64,8 @@ public class Main {
 
                 case 5:
                     System.out.println("Function 5 selected!");
+                    System.out.print("Enter a slang: ");
+                    app.editSlangWord(sc.nextLine(), sc);
 
                     break;
                     
