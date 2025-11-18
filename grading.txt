@@ -1,0 +1,37 @@
+Các chức năng 
+1. Chức năng tìm kiếm theo slang word.
+    Hoàn thành: 10 điểm.
+
+2. Chức năng tìm kiếm theo definition, hiển thị ra tất cả các slang words mà trong defintion có chứa keyword gõ vào. 
+    Hoàn thành: 10 điểm.
+
+3. Chức năng hiển thị history, danh sách các slang word đã tìm kiếm.
+    Hoàn thành: 10 điểm.
+
+4. Chức năng add 1 slang words mới. Nếu slang words trùng thì thông báo cho người dùng, confirm có overwrite hay duplicate ra 1 slang word mới. 
+    Hoàn thành: 10 điểm.
+
+5. Chức năng edit 1 slang word.
+    Hoàn thành: 10 điểm.
+
+6. Chức năng delete 1 slang word. Confirm trước khi xoá.
+    Hoàn thành: 10 điểm.
+
+7. Chức năng reset danh sách slang words gốc.
+    Hoàn thành: 10 điểm.
+
+8. Chức năng random 1 slang word (On this day slang word).
+    Hoàn thành: 10 điểm.
+
+9. Chức năng đố vui, chương trình hiển thị 1 random slang word, với 4 đáp án cho người dùng chọn.
+    Hoàn thành: 10 điểm.
+
+10. Chức năng đố vui, chương trình hiển thị 1 definition, với 4 slang words đáp án cho người dùng chọn. 
+    Hoàn thành: 10 điểm.
+
+Các yêu cầu khác:
+- Các chức năng đều chạy dưới 1s: Hoàn thành.
+- Dưới 10 commits "và" trải dài trong 5 ngày: Không dưới 10 commits nên hoàn thành.
+- Tham khảo Grok và kênh W3Schools nhưng không quá 10%, chủ yếu dựa vào kiến thức được học. Chỉ sử dụng AI để tham khảo và coi syntax: Hoàn thành.
+
+Tổng: 100 điểm.

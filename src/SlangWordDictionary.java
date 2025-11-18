@@ -6,32 +6,37 @@ import src.Quiz;
 
 public class SlangWordDictionary {
     // Implementation of the SlangWordDictionary class
-    private static final String InputFilePath = "./data/slang.txt";
-    private static final String DataFilePath = "./data/data.dat";
+    private static final String INPUT_FILE = "./data/slang.txt";
+    private static final String DATA_FILE = "./data/data.dat";
 
-    private LinkedHashMap<String, List<String>> dictionary;
+    private HashMap<String, List<String>> origin, data;
     private Map<String, List<String>> keywordIndex;
     private List<String> searchHistory;
 
     public SlangWordDictionary() {
-        dictionary = new LinkedHashMap<>();
+        origin = new HashMap<>();
+        data = new HashMap<>();
         keywordIndex = new HashMap<>();
         searchHistory = new ArrayList<>();
     }
 
-    public Map<String, List<String>> getDictionary() {
-        return this.dictionary;
+    public Map<String, List<String>> getData() {
+        return this.data;
+    }
+
+    public List<String> getHistory() {
+        return searchHistory;
     }
 
     public void loadDataFromFile() {
-        File file = new File(InputFilePath);
+        File file = new File(INPUT_FILE);
         if (!file.exists()) {
-            System.err.println("Can't find " + InputFilePath);
+            System.err.println("Can't find " + INPUT_FILE);
             System.out.println("Please place the file in the project folder.");
             return;
         }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(InputFilePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(INPUT_FILE))) {
             String line = br.readLine();
 
             while ((line = br.readLine()) != null) {
@@ -50,18 +55,18 @@ public class SlangWordDictionary {
                 
                 if (meanings.isEmpty()) continue;
 
-                List<String> current = dictionary.getOrDefault(slang, new ArrayList<>());
+                List<String> current = data.getOrDefault(slang, new ArrayList<>());
                 for (String m : meanings) {
                     if (!current.contains(m)) {
                         current.add(m);
                     }
                 }
-                dictionary.put(slang, current);
+                data.put(slang, current);
             }
 
             buildKeywordIndex();
-            System.out.println("Loaded file successfully " + dictionary.size() + " slang words from slang.txt");
-            
+            origin = deepCopy(data);
+
         } catch (IOException e) {
             System.err.println("File reading's error: " + e.getMessage());
         }
@@ -69,32 +74,44 @@ public class SlangWordDictionary {
 
     private void buildKeywordIndex() {
         keywordIndex.clear();
-
-        for (Map.Entry<String, List<String>> entry : dictionary.entrySet()) {
+        for (Map.Entry<String, List<String>> entry : data.entrySet()) {
             String slang = entry.getKey();
-
             for (String meaning : entry.getValue()) {
-                String[] words = meaning.toLowerCase().split("\\W+");
+                String[] tokens = meaning.toLowerCase().split("[\\s,;\\|\\(\\)]+");
+                for (String token : tokens) {
+                    String cleaned = token.trim();
+                    if (cleaned.isEmpty()) continue;
 
-                for (String word : words) {
-                    if (word.isBlank()) continue;
-                    keywordIndex.computeIfAbsent(word, k -> new ArrayList<>()).add(slang);
+                    keywordIndex.computeIfAbsent(cleaned, k -> new ArrayList<>()).add(slang);
+
+                    String cleanKey = cleaned.replaceAll("[^a-z0-9]", "");
+                    if (!cleanKey.isEmpty()) {
+                        keywordIndex.computeIfAbsent(cleanKey, k -> new ArrayList<>()).add(slang);
+                    }
                 }
             }
-
         }
     }
 
+    private static HashMap<String, List<String>> deepCopy(Map<String, List<String>> original) {
+        HashMap<String, List<String>> copy = new HashMap<>();
+        for (Map.Entry<String, List<String>> entry : original.entrySet()) {
+            // Tạo List mới cho mỗi key, String immutable nên không cần copy từng phần tử
+            copy.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+        }
+        return copy;
+    }
+
     public void exportFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(DataFilePath))) {
-            List<String> slangs = new ArrayList<>(dictionary.keySet());
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(DATA_FILE))) {
+            List<String> slangs = new ArrayList<>(data.keySet());
             
             for (String slang : slangs) {
-                bw.write(slang + "`" + String.join("| ", dictionary.get(slang)));
+                bw.write(slang + "`" + String.join("| ", data.get(slang)));
                 bw.newLine();
             }
             
-            System.out.println("Exported data to " + DataFilePath + " successfully!");
+            System.out.println("Exported data to " + DATA_FILE + " successfully!");
         } catch (IOException e) {
             System.err.println("File writing's error: " + e.getMessage());
         }
@@ -108,60 +125,41 @@ public class SlangWordDictionary {
         }
 
         slang = slang.trim();
-        List<String> meanings = dictionary.get(slang);
+        List<String> meanings = data.get(slang);
         if (meanings == null) {
             System.out.println("Can't find slang: " + slang);
             return null;
         }
-        System.out.println(slang + " : " + String.join(" | ", meanings));
+
         searchHistory.add("Find by slang: " + slang);
         return meanings;
     }
 
-    public void findByDefinition(String keyword) {
+    public List<String> findByDefinition(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             System.out.println("Empty keyword!");
-            return;
+            return null;
         }
 
         String key = keyword.trim().toLowerCase();
-        List<String> results = keywordIndex.get(key);
+        List<String> slangs = keywordIndex.get(key);
         
-        if (results == null || results.isEmpty()) {
+        if (slangs == null || slangs.isEmpty()) {
             System.out.println("Can't find slang containing " + keyword);
-            return;
+            return null;
         }
 
-        System.out.println("Slangs that contain " + keyword);
-        System.out.println(String.join(", ", results));
-
-        searchHistory.add("Find by definition " + keyword + " -> slangs: " + String.join("| ", results));
+        searchHistory.add("Find by definition " + keyword);
+        return slangs;
     }
 
-    void showHistory() {
-        if (searchHistory.isEmpty()) {
-            System.out.println("Empty history!");
-            return;
-        }
-        System.out.println("===History===");
-        searchHistory.forEach(System.out::println);
-    }
-
-    void addSlangWord(String slang, List<String> meanings, Scanner sc) {
-        if (slang == null || slang.trim().isEmpty() || meanings == null || meanings.isEmpty()) {
-            System.out.println("Invalid input");
-            return;
-        }
-
-        slang = slang.trim();
-        meanings = meanings.stream().map(String::trim).toList();
-
-        List<String> slangMeanings = dictionary.get(slang);
+    public boolean addSlangWord(String slang, List<String> meanings, Scanner sc) {
+        List<String> slangMeanings = data.get(slang);
         if (slangMeanings == null) {
-            dictionary.put(slang, new ArrayList<>(meanings));
-            System.out.println("Added slang " + slang);
+            data.put(slang, new ArrayList<>(meanings));
             exportFile();
-            return;
+            buildKeywordIndex();
+            return true;
         }
         
         System.out.println("Slang " + slang + " existed! Please select an option:");
@@ -174,7 +172,7 @@ public class SlangWordDictionary {
 
         if (choice == 1) {
             // overwrite
-            dictionary.put(slang, new ArrayList<>(meanings));
+            data.put(slang, new ArrayList<>(meanings));
         } else if (choice == 2) {
             // add new meanings but avoid duplicates
             for (String m : meanings) {
@@ -182,77 +180,75 @@ public class SlangWordDictionary {
                     slangMeanings.add(m);
                 }
             }
-            dictionary.put(slang, slangMeanings);
+            data.put(slang, slangMeanings);
         } else {
             System.out.println("Invalid option!");
         }
 
-        System.out.println("Added slang " + slang);
         exportFile();
+        buildKeywordIndex();
+
+        return true;
     }
 
-    void editSlangWord(String slang, Scanner sc) {
+    public boolean editSlangWord(String slang, Scanner sc) {
         List<String> meanings = findBySlang(slang);
         if (meanings == null)
-            return;
-        System.out.println("Enter new meanings: ");
+            return false;
+
+        System.out.println("Enter new meanings (separated by ','): ");
         meanings.clear();
+
         String[] arr = sc.nextLine().split(",");
         for (String a : arr) {
             meanings.add(a.trim());
         }
-        dictionary.put(slang, meanings);
-        System.out.println("Edited slang " + slang);
+        data.put(slang, meanings);
         exportFile();
+        buildKeywordIndex();
+
+        return true;
     }
 
-    void deleteSlangWord(String slang) {
-        dictionary.remove(slang);
-        System.out.println("Deleted slang " + slang);
+    public boolean deleteSlangWord(String slang) {
+        data.remove(slang);
         exportFile();
+        buildKeywordIndex();
+        
+        return true;
     }
 
-    public void resetDictionary(Scanner sc) {
-        System.out.print("Confirm to reset to the original dictionary? (y/n): ");
-        if (!"y".equalsIgnoreCase(sc.nextLine().trim())) {
-            System.out.println("Canceled reset.");
-            return;
-        }
-        dictionary.clear();
+    public void resetDictionary() {
+        data.clear();
+        data.putAll(deepCopy(origin));
         keywordIndex.clear();
-        loadDataFromFile();
-        System.out.println("Reset dictionary successfully!");
+        buildKeywordIndex();
+        exportFile();
     }
 
     // https://www.geeksforgeeks.org/java/generating-random-numbers-in-java/
-    public Map.Entry<String, List<String>> randomSlang() {
-        if (dictionary.isEmpty()) {
-            System.out.println("Empty dicitonary!");
-            return null;
-        }
-
-        List<String> keys = new ArrayList<>(dictionary.keySet());
+    public String randomSlang() {
+        List<String> keys = new ArrayList<>(data.keySet());
         String slang = keys.get(new Random().nextInt(keys.size()));
-        List<String> meanings = dictionary.get(slang);
-        System.out.println(slang + " -> " + String.join(" | ", meanings));
-        return new AbstractMap.SimpleEntry<>(slang, meanings);
+        List<String> meanings = data.get(slang);
+        return (slang + " -> " + String.join(" | ", meanings));
     }
 
-    public Quiz<String, List<String>> playQuiz() {
-        if (dictionary.size() < 4) return null;
+    public Quiz<String, List<String>> creatQuestion() {
+        if (data.size() < 4) return null;
 
-        List<String> keys = new ArrayList<>(dictionary.keySet());
+        List<String> keys = new ArrayList<>(data.keySet());
         Collections.shuffle(keys);  // Ensure the randomness
 
         String correctKey = keys.get(0);
-        List<String> correctValue = dictionary.get(correctKey);
+        List<String> correctValue = data.get(correctKey);
         Map.Entry<String, List<String>> correctEntry =
             new AbstractMap.SimpleEntry<>(correctKey, correctValue);
 
         List<Map.Entry<String, List<String>>> incorrectEntries = new ArrayList<>();
         for (int i = 1; i < 4; i++) {
             String key = keys.get(i);
-            List<String> value = dictionary.get(key);
+            List<String> value = data.get(key);
             incorrectEntries.add(new AbstractMap.SimpleEntry<>(key, value));
         }
 

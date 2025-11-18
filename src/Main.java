@@ -1,134 +1,34 @@
+// src/Main.java
 package src;
-import java.security.KeyStore.Entry;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import src.SlangWordDictionary;
 
 public class Main {
     public static void main(String[] args) {
-        SlangWordDictionary app = new SlangWordDictionary();
-        app.loadDataFromFile();
-        Scanner sc = new Scanner(System.in);
+        // Khởi tạo từ điển và tải dữ liệu gốc
+        SlangWordDictionary dictionary = new SlangWordDictionary();
+        dictionary.loadDataFromFile();
 
-        while(true) {
-            System.out.println("\n========== SLANG WORD DICTIONARY ==========");
-            System.out.println("1.  Search by slang word");
-            System.out.println("2.  Search by definition");
-            System.out.println("3.  Show searching history");
-            System.out.println("4.  Add a new slang word");
-            System.out.println("5.  Edit a slang word");
-            System.out.println("6.  Delete a slang word");
-            System.out.println("7.  Reset the original slang words list");
-            System.out.println("8.  On this day slang word");
-            System.out.println("9.  Quiz: Slang word to Meaning");
-            System.out.println("10. Quiz: Meaning to Slang word");
-            System.out.println("0.  Exit");
+        // Khởi tạo Menu và Controller (Dependency Injection - chuẩn OOP)
+        Menu menu = new Menu();
+        Controller controller = new Controller(dictionary);
 
-            System.out.print("Please enter a number (0 - 10): ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+        System.out.println("==============================================================");
+        System.out.println("                    SLANG WORD DICTIONARY");
+        System.out.println("   Name: Le Trung Kien");
+        System.out.println("   Student ID: 23127075");
+        System.out.println("   Class: Java Application - 23KTPM1");
+        System.out.println("==============================================================\n");
 
-            switch (choice) {
-                case 0:
-                    System.out.println("Goodbye my dear!\nProgram is shutting down...");
-                    sc.close();
-                    return;
+        // Vòng lặp chính của chương trình
+        while (true) {
+            int choice = menu.getChoice();
 
-                case 1:
-                    System.out.println("Function 1 selected!");
-                    System.out.println("Enter a slang word: ");
-                    app.findBySlang(sc.nextLine());
-                    break;
-
-                case 2:
-                    System.out.println("Function 2 selected!");
-                    System.out.println("Enter a keyword: ");
-                    app.findByDefinition(sc.nextLine());
-                    break;
-
-                case 3:
-                    System.out.println("Function 3 selected!");
-                    app.showHistory();
-                    break;
-
-                case 4:
-                    System.out.println("Function 4 selected!");
-                    System.out.print("Enter a new slang: ");
-                    String slang = sc.nextLine();
-                    System.out.print("Enter " + slang + "'s meanings (separated by ','): ");
-                    String meanings = sc.nextLine();
-                    List<String> meaningsList = new ArrayList<>();
-                    for (String m : meanings.split(",")) {
-                        meaningsList.add(m.trim());
-                    }
-                    app.addSlangWord(slang, meaningsList, sc);
-                    break;
-
-                case 5:
-                    System.out.println("Function 5 selected!");
-                    System.out.print("Enter a slang: ");
-                    app.editSlangWord(sc.nextLine(), sc);
-
-                    break;
-                    
-                case 6:
-                    System.out.println("Function 6 selected!");
-                    System.out.println("Enter a slang to remove: ");
-                    slang = sc.nextLine();
-
-                    System.out.println("Confirmed to delete " + slang + " (true / false): ");                    
-                    boolean allowDeleted = sc.nextBoolean();
-                    sc.nextLine();
-
-                    if (allowDeleted)
-                        app.deleteSlangWord(slang);
-                    break;
-
-                case 7:
-                    System.out.println("Function 7 selected!");
-                    app.resetDictionary(sc);
-                    break;
-
-                case 8:
-                    System.out.println("Function 8 selected!");
-                    Map.Entry<String, List<String>> output = app.randomSlang();
-                    break;
-
-                case 9:
-                    System.out.println("Function 9 selected!");
-                    Quiz<String,  List<String>> quiz = app.playQuiz();
-
-                    Map.Entry<String, List<String>> correct = quiz.getCorrect();
-                    List<Map.Entry<String, List<String>>> incorrect = quiz.getIncorrect();
-
-                    System.out.println("What's the definition of " + correct.getKey().toString());
-
-                    List<List<String>> ans = new ArrayList<>();
-                    ans.add(correct.getValue());
-
-                    for (Map.Entry<String, List<String>> e : incorrect)
-                        ans.add(e.getValue());
-                    Collections.shuffle(ans);
-
-                    for (int i = 0; i < ans.size(); i++) {
-                        System.out.println((i + 1) + ". " + String.join(" | ", ans.get(i)));
-                    }
-
-                    break;
-
-                case 10:
-                    System.out.println("Function 10 selected!");
-
-                    break;
-
-                default:
-                    System.out.println("Invalid selection!\n");
-                    break;
+            if (choice == 0) {
+                System.out.println("\nGoodbye! See you again!");
+                System.out.println("Program is closing...");
+                break;
             }
 
+            controller.execute(choice);
         }
     }
 }
