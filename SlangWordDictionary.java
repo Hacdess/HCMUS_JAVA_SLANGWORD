@@ -200,6 +200,13 @@ public class SlangWordDictionary {
             meanings.add(a.trim());
         }
         dictionary.put(slang, meanings);
+        System.out.println("Edited slang " + slang);
+        exportFile();
+    }
+
+    void deleteSlangWord(String slang) {
+        dictionary.remove(slang);
+        System.out.println("Deleted slang " + slang);
         exportFile();
     }
 
@@ -214,6 +221,8 @@ public class SlangWordDictionary {
         loadDataFromFile();
         System.out.println("Reset dictionary successfully!");
     }
+
+
 
     // public static void main(String[] args) {
     //     SlangWordDictionary app = new SlangWordDictionary();

@@ -71,12 +71,20 @@ public class Main {
                     
                 case 6:
                     System.out.println("Function 6 selected!");
-                    app.resetDictionary(sc);
+                    System.out.println("Enter a slang to remove: ");
+                    slang = sc.nextLine();
+
+                    System.out.println("Confirmed to delete " + slang + " (true / false): ");                    
+                    boolean allowDeleted = sc.nextBoolean();
+                    sc.nextLine();
+
+                    if (allowDeleted)
+                        app.deleteSlangWord(slang);
                     break;
 
                 case 7:
                     System.out.println("Function 7 selected!");
-
+                    app.resetDictionary(sc);
                     break;
 
                 case 8:
