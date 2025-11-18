@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -27,6 +29,7 @@ public class Main {
             switch (choice) {
                 case 0:
                     System.out.println("Goodbye my dear!\nProgram is shutting down...");
+                    sc.close();
                     return;
 
                 case 1:
@@ -48,7 +51,15 @@ public class Main {
 
                 case 4:
                     System.out.println("Function 4 selected!");
-
+                    System.out.print("Enter a new slang: ");
+                    String slang = sc.nextLine();
+                    System.out.print("Enter " + slang + "'s meanings (separated by ','): ");
+                    String meanings = sc.nextLine();
+                    List<String> meaningsList = new ArrayList<>();
+                    for (String m : meanings.split(",")) {
+                        meaningsList.add(m.trim());
+                    }
+                    app.addSlangWord(slang, meaningsList, sc);
                     break;
 
                 case 5:
@@ -85,7 +96,7 @@ public class Main {
                     System.out.println("Invalid selection!\n");
                     break;
             }
-        }
 
+        }
     }
 }

@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class SlangWordDictionary {
@@ -143,6 +142,50 @@ public class SlangWordDictionary {
         }
         System.out.println("===History===");
         searchHistory.forEach(System.out::println);
+    }
+
+    void addSlangWord(String slang, List<String> meanings, Scanner sc) {
+        if (slang == null || slang.trim().isEmpty() || meanings == null || meanings.isEmpty()) {
+            System.out.println("Invalid input");
+            return;
+        }
+
+        slang = slang.trim();
+        meanings = meanings.stream().map(String::trim).toList();
+
+        List<String> slangMeanings = dictionary.get(slang);
+        if (slangMeanings == null) {
+            dictionary.put(slang, new ArrayList<>(meanings));
+            System.out.println("Added slang " + slang);
+            exportFile();
+            return;
+        }
+        
+        System.out.println("Slang " + slang + " existed! Please select an option:");
+        System.out.println("1. Overwrite meaning.");
+        System.out.println("2. Add new meaning.");
+        System.out.println("Enter your selection: ");
+
+        int choice = sc.nextInt();
+        sc.nextLine();
+
+        if (choice == 1) {
+            // overwrite
+            dictionary.put(slang, new ArrayList<>(meanings));
+        } else if (choice == 2) {
+            // add new meanings but avoid duplicates
+            for (String m : meanings) {
+                if (!slangMeanings.contains(m)) {
+                    slangMeanings.add(m);
+                }
+            }
+            dictionary.put(slang, slangMeanings);
+        } else {
+            System.out.println("Invalid option!");
+        }
+
+        System.out.println("Added slang " + slang);
+        exportFile();
     }
     // public static void main(String[] args) {
     //     SlangWordDictionary app = new SlangWordDictionary();
