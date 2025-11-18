@@ -1,7 +1,11 @@
+package src;
+import java.security.KeyStore.Entry;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import src.SlangWordDictionary;
 
 public class Main {
     public static void main(String[] args) {
@@ -95,6 +99,23 @@ public class Main {
 
                 case 9:
                     System.out.println("Function 9 selected!");
+                    Quiz<String,  List<String>> quiz = app.playQuiz();
+
+                    Map.Entry<String, List<String>> correct = quiz.getCorrect();
+                    List<Map.Entry<String, List<String>>> incorrect = quiz.getIncorrect();
+
+                    System.out.println("What's the definition of " + correct.getKey().toString());
+
+                    List<List<String>> ans = new ArrayList<>();
+                    ans.add(correct.getValue());
+
+                    for (Map.Entry<String, List<String>> e : incorrect)
+                        ans.add(e.getValue());
+                    Collections.shuffle(ans);
+
+                    for (int i = 0; i < ans.size(); i++) {
+                        System.out.println((i + 1) + ". " + String.join(" | ", ans.get(i)));
+                    }
 
                     break;
 

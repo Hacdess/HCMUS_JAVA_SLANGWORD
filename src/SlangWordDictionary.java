@@ -1,11 +1,13 @@
+package src;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import src.Quiz;
 
 public class SlangWordDictionary {
     // Implementation of the SlangWordDictionary class
-    private static final String InputFilePath = "slang.txt";
-    private static final String DataFile = "data.dat";
+    private static final String InputFilePath = "./data/slang.txt";
+    private static final String DataFilePath = "./data/data.dat";
 
     private LinkedHashMap<String, List<String>> dictionary;
     private Map<String, List<String>> keywordIndex;
@@ -84,7 +86,7 @@ public class SlangWordDictionary {
     }
 
     public void exportFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(DataFile))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(DataFilePath))) {
             List<String> slangs = new ArrayList<>(dictionary.keySet());
             
             for (String slang : slangs) {
@@ -92,7 +94,7 @@ public class SlangWordDictionary {
                 bw.newLine();
             }
             
-            System.out.println("Exported data to " + DataFile + " successfully!");
+            System.out.println("Exported data to " + DataFilePath + " successfully!");
         } catch (IOException e) {
             System.err.println("File writing's error: " + e.getMessage());
         }
@@ -234,5 +236,26 @@ public class SlangWordDictionary {
         List<String> meanings = dictionary.get(slang);
         System.out.println(slang + " -> " + String.join(" | ", meanings));
         return new AbstractMap.SimpleEntry<>(slang, meanings);
+    }
+
+    public Quiz<String, List<String>> playQuiz() {
+        if (dictionary.size() < 4) return null;
+
+        List<String> keys = new ArrayList<>(dictionary.keySet());
+        Collections.shuffle(keys);  // Ensure the randomness
+
+        String correctKey = keys.get(0);
+        List<String> correctValue = dictionary.get(correctKey);
+        Map.Entry<String, List<String>> correctEntry =
+            new AbstractMap.SimpleEntry<>(correctKey, correctValue);
+
+        List<Map.Entry<String, List<String>>> incorrectEntries = new ArrayList<>();
+        for (int i = 1; i < 4; i++) {
+            String key = keys.get(i);
+            List<String> value = dictionary.get(key);
+            incorrectEntries.add(new AbstractMap.SimpleEntry<>(key, value));
+        }
+
+        return new Quiz<>(correctEntry, incorrectEntries);
     }
 }
