@@ -38,12 +38,12 @@ public class Main {
                 case 2:
                     System.out.println("Function 2 selected!");
                     System.out.println("Enter a keyword: ");
-
+                    app.findByDefinition(sc.nextLine());
                     break;
 
                 case 3:
                     System.out.println("Function 3 selected!");
-
+                    app.showHistory();
                     break;
 
                 case 4:

@@ -113,9 +113,37 @@ public class SlangWordDictionary {
             return;
         }
         System.out.println(slang + " : " + String.join(" | ", meanings));
-        searchHistory.add("Find slang: " + slang);
+        searchHistory.add("Find by slang: " + slang);
     }
 
+    public void findByDefinition(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            System.out.println("Empty keyword!");
+            return;
+        }
+
+        String key = keyword.trim().toLowerCase();
+        List<String> results = keywordIndex.get(key);
+        
+        if (results == null || results.isEmpty()) {
+            System.out.println("Can't find slang containing " + keyword);
+            return;
+        }
+
+        System.out.println("Slangs that contain " + keyword);
+        System.out.println(String.join(", ", results));
+
+        searchHistory.add("Find by definition " + keyword + " -> slangs: " + String.join("| ", results));
+    }
+
+    void showHistory() {
+        if (searchHistory.isEmpty()) {
+            System.out.println("Empty history!");
+            return;
+        }
+        System.out.println("===History===");
+        searchHistory.forEach(System.out::println);
+    }
     // public static void main(String[] args) {
     //     SlangWordDictionary app = new SlangWordDictionary();
     //     app.loadDataFromFile();
