@@ -203,6 +203,18 @@ public class SlangWordDictionary {
         exportFile();
     }
 
+    public void resetDictionary(Scanner sc) {
+        System.out.print("Confirm to reset to the original dictionary? (y/n): ");
+        if (!"y".equalsIgnoreCase(sc.nextLine().trim())) {
+            System.out.println("Canceled reset.");
+            return;
+        }
+        dictionary.clear();
+        keywordIndex.clear();
+        loadDataFromFile();
+        System.out.println("Reset dictionary successfully!");
+    }
+
     // public static void main(String[] args) {
     //     SlangWordDictionary app = new SlangWordDictionary();
     //     app.loadDataFromFile();

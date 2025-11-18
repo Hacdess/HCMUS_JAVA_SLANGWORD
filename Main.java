@@ -71,7 +71,7 @@ public class Main {
                     
                 case 6:
                     System.out.println("Function 6 selected!");
-
+                    app.resetDictionary(sc);
                     break;
 
                 case 7:
