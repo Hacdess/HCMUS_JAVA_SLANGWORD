@@ -222,6 +222,7 @@ public class SlangWordDictionary {
         System.out.println("Reset dictionary successfully!");
     }
 
+    // https://www.geeksforgeeks.org/java/generating-random-numbers-in-java/
     public Map.Entry<String, List<String>> randomSlang() {
         if (dictionary.isEmpty()) {
             System.out.println("Empty dicitonary!");
@@ -234,16 +235,4 @@ public class SlangWordDictionary {
         System.out.println(slang + " -> " + String.join(" | ", meanings));
         return new AbstractMap.SimpleEntry<>(slang, meanings);
     }
-
-    // public static void main(String[] args) {
-    //     SlangWordDictionary app = new SlangWordDictionary();
-    //     app.loadDataFromFile();
-        
-
-
-
-    //     app.exportFile();
-
-            
-    // }
 }
