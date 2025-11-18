@@ -222,7 +222,18 @@ public class SlangWordDictionary {
         System.out.println("Reset dictionary successfully!");
     }
 
+    public Map.Entry<String, List<String>> randomSlang() {
+        if (dictionary.isEmpty()) {
+            System.out.println("Empty dicitonary!");
+            return null;
+        }
 
+        List<String> keys = new ArrayList<>(dictionary.keySet());
+        String slang = keys.get(new Random().nextInt(keys.size()));
+        List<String> meanings = dictionary.get(slang);
+        System.out.println(slang + " -> " + String.join(" | ", meanings));
+        return new AbstractMap.SimpleEntry<>(slang, meanings);
+    }
 
     // public static void main(String[] args) {
     //     SlangWordDictionary app = new SlangWordDictionary();

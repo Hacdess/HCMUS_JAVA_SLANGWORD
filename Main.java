@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -89,7 +90,7 @@ public class Main {
 
                 case 8:
                     System.out.println("Function 8 selected!");
-
+                    Map.Entry<String, List<String>> output = app.randomSlang();
                     break;
 
                 case 9:
