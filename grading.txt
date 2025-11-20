@@ -34,4 +34,6 @@ Các yêu cầu khác:
 - Dưới 10 commits "và" trải dài trong 5 ngày: Không dưới 10 commits nên hoàn thành.
 - Tham khảo Grok và kênh W3Schools nhưng không quá 10%, chủ yếu dựa vào kiến thức được học. Chỉ sử dụng AI để tham khảo và coi syntax: Hoàn thành.
 
+Link Youtube: 
+
 Tổng: 100 điểm.
