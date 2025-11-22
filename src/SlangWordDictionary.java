@@ -72,6 +72,10 @@ public class SlangWordDictionary {
         }
     }
 
+    public void useBuildKeyWordIndex() {
+        buildKeywordIndex();
+    }
+
     private void buildKeywordIndex() {
         keywordIndex.clear();
         for (Map.Entry<String, List<String>> entry : data.entrySet()) {
