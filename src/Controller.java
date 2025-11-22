@@ -88,7 +88,7 @@ public class Controller {
     }
 
     private void showHistory() {
-        System.out.println("===== Searching History =====");
+        System.out.println("===== Function 3: Searching History =====");
         List<String> searchHistory = dictionary.getHistory();
         if (searchHistory == null) {
             System.out.println("Empty dictionary.");
@@ -149,7 +149,7 @@ public class Controller {
     }
 
     private void resetDictionaryWithConfirm() {
-        System.out.println("===== Reset Dictionary =====");
+        System.out.println("===== Function 7: Reset Dictionary =====");
         System.out.print("Confirm to reset to the original dictionary? (y/n): ");
         if (!"y".equalsIgnoreCase(sc.nextLine().trim())) {
             System.out.println("Canceled reset.");

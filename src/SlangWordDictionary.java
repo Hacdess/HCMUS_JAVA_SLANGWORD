@@ -72,10 +72,6 @@ public class SlangWordDictionary {
         }
     }
 
-    public void useBuildKeyWordIndex() {
-        buildKeywordIndex();
-    }
-
     private void buildKeywordIndex() {
         keywordIndex.clear();
         for (Map.Entry<String, List<String>> entry : data.entrySet()) {
@@ -87,11 +83,6 @@ public class SlangWordDictionary {
                     if (cleaned.isEmpty()) continue;
 
                     keywordIndex.computeIfAbsent(cleaned, k -> new ArrayList<>()).add(slang);
-
-                    String cleanKey = cleaned.replaceAll("[^a-z0-9]", "");
-                    if (!cleanKey.isEmpty()) {
-                        keywordIndex.computeIfAbsent(cleanKey, k -> new ArrayList<>()).add(slang);
-                    }
                 }
             }
         }
@@ -145,16 +136,26 @@ public class SlangWordDictionary {
             return null;
         }
 
-        String key = keyword.trim().toLowerCase();
-        List<String> slangs = keywordIndex.get(key);
-        
-        if (slangs == null || slangs.isEmpty()) {
+        String lowerKeyword = keyword.trim().toLowerCase();
+        Set<String> result = new HashSet<>();
+
+        String[] words = lowerKeyword.split("\\s+");
+
+        for (String word : words) {
+            if (word.isEmpty()) continue;
+            List<String> slangs = keywordIndex.get(word);
+            if (slangs != null)
+                result.addAll(slangs);
+        }
+
+        if (result.isEmpty()) {
             System.out.println("Can't find slang containing " + keyword);
+            System.out.println("Can't find any slang word containing keyword: \"" + keyword + "\"");
             return null;
         }
 
         searchHistory.add("Find by definition " + keyword);
-        return slangs;
+        return new ArrayList<>(result);
     }
 
     public boolean addSlangWord(String slang, List<String> meanings, Scanner sc) {
