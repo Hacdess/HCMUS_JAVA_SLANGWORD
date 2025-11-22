@@ -27,7 +27,6 @@ public class Menu {
         System.out.print("Please enter a number (0 - 10): ");
     }
 
-    // Hàm duy nhất được gọi từ bên ngoài - PUBLIC - trả về lựa chọn
     public int getChoice() {
         display(); // Gọi hàm private để in menu
 

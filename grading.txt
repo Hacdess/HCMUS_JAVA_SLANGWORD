@@ -1,4 +1,5 @@
-Các chức năng 
+Chấm điểm các chức năng 
+
 1. Chức năng tìm kiếm theo slang word.
     Hoàn thành: 10 điểm.
 
@@ -23,16 +24,22 @@ Các chức năng
 8. Chức năng random 1 slang word (On this day slang word).
     Hoàn thành: 10 điểm.
 
+
+Chức năng 9 và 10 có tham khảo 
 9. Chức năng đố vui, chương trình hiển thị 1 random slang word, với 4 đáp án cho người dùng chọn.
     Hoàn thành: 10 điểm.
 
 10. Chức năng đố vui, chương trình hiển thị 1 definition, với 4 slang words đáp án cho người dùng chọn. 
     Hoàn thành: 10 điểm.
 
-Các yêu cầu khác:
-- Các chức năng đều chạy dưới 1s: Hoàn thành.
-- Dưới 10 commits "và" trải dài trong 5 ngày: Không dưới 10 commits nên hoàn thành.
-- Tham khảo Grok và kênh W3Schools nhưng không quá 10%, chủ yếu dựa vào kiến thức được học. Chỉ sử dụng AI để tham khảo và coi syntax: Hoàn thành.
+- Đồ án tham khảo Grok và kênh W3Schools nhưng không quá 10%, chủ yếu dựa vào kiến thức được học.
+- Đồ án chỉ sử dụng AI để tham khảo và coi syntax để tiết kiệm thời gian, cải thiện phần cài đặt code là chính.
+
+
+** CÁCH CHẠY FILE **
+- Di chuyển đến folder dự án
+- Nhập lệnh: java -jar app.jar
+- Làm theo hướng dẫn của chương trình.
 
 Link Youtube: 
 

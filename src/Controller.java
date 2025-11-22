@@ -47,7 +47,7 @@ public class Controller {
         }
     }
 
-    // Ref from Grok
+    // Học từ Grok cách cho phép các function được chạy tiếp
     private void loopInFunction(Runnable function, String functionName) {
         while (true) {
             System.out.println("\n===== " + functionName + " =====");
@@ -81,7 +81,7 @@ public class Controller {
         List<String> slangs = dictionary.findByDefinition(keyword);
         if (slangs == null || slangs.isEmpty()) {
             System.out.println("Can't find any slang word containing keyword: \"" + keyword + "\"");
-            return; // Dừng luôn, không in gì nữa
+            return;
         }
         System.out.println("Slang words that contain " + keyword + ":");
         System.out.println(String.join(", ", slangs));

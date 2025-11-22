@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import src.Quiz;
 
 public class SlangWordDictionary {
-    // Implementation of the SlangWordDictionary class
     private static final String INPUT_FILE = "./data/slang.txt";
     private static final String DATA_FILE = "./data/data.dat";
 
@@ -77,7 +76,7 @@ public class SlangWordDictionary {
         for (Map.Entry<String, List<String>> entry : data.entrySet()) {
             String slang = entry.getKey();
             for (String meaning : entry.getValue()) {
-                String[] tokens = meaning.toLowerCase().split("[\\s,;\\|\\(\\)]+");
+                String[] tokens = meaning.toLowerCase().split("[\\s,;\\|\\(\\)]+"); // Tham khảo cách split từ Grok
                 for (String token : tokens) {
                     String cleaned = token.trim();
                     if (cleaned.isEmpty()) continue;
@@ -231,7 +230,7 @@ public class SlangWordDictionary {
         exportFile();
     }
 
-    // https://www.geeksforgeeks.org/java/generating-random-numbers-in-java/
+    // Tham khảo hàm random trong https://www.geeksforgeeks.org/java/generating-random-numbers-in-java/
     public String randomSlang() {
         List<String> keys = new ArrayList<>(data.keySet());
         String slang = keys.get(new Random().nextInt(keys.size()));
@@ -243,7 +242,7 @@ public class SlangWordDictionary {
         if (data.size() < 4) return null;
 
         List<String> keys = new ArrayList<>(data.keySet());
-        Collections.shuffle(keys);  // Ensure the randomness
+        Collections.shuffle(keys);  // Đảm bảo tính random của các cặp câu hỏi - câu trả lời, tham khảo từ Grok.
 
         String correctKey = keys.get(0);
         List<String> correctValue = data.get(correctKey);

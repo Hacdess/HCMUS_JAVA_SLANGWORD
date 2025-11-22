@@ -3,11 +3,9 @@ package src;
 
 public class Main {
     public static void main(String[] args) {
-        // Khởi tạo từ điển và tải dữ liệu gốc
         SlangWordDictionary dictionary = new SlangWordDictionary();
         dictionary.loadDataFromFile();
 
-        // Khởi tạo Menu và Controller (Dependency Injection - chuẩn OOP)
         Menu menu = new Menu();
         Controller controller = new Controller(dictionary);
 
@@ -18,7 +16,6 @@ public class Main {
         System.out.println("   Class: Java Application - 23KTPM1");
         System.out.println("==============================================================\n");
 
-        // Vòng lặp chính của chương trình
         while (true) {
             int choice = menu.getChoice();
 
